@@ -305,7 +305,7 @@ This project is particularly useful for:
 - Provides a simple and testable user flow
 - Good starter template for expanding into a larger recommender system
 
-## Limitations / Improvement Opportunities
+## Improvement Opportunities
 
 - The dataset is synthetic and small; production-scale use would require real learner data
 - Some paths and scripts are environment-specific (for example, hardcoded Windows paths)
@@ -328,6 +328,4 @@ This project is a practical machine learning recommendation system that demonstr
 
 The combination of a Random Forest model, FastAPI backend, and Streamlit interface makes it a strong educational example for building recommendation systems end-to-end.
 
-## License
 
-This project does not appear to include an explicit license file. If you intend to share or publish it publicly, consider adding a license such as MIT or Apache 2.0.
