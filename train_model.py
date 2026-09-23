@@ -1,50 +1,83 @@
+from __future__ import annotations
+
+from pathlib import Path
+
+import joblib
 import mlflow
 import mlflow.sklearn
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score
 import pandas as pd
-import joblib
-import os
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score
+from sklearn.model_selection import train_test_split
 
-mlflow.set_tracking_uri("sqlite:///mlflow.db")
-mlflow.set_experiment("course_recommendation")
+BASE_DIR = Path(__file__).resolve().parent
+DATA_PATH = BASE_DIR / "Data" / "courses.csv"
+MODEL_DIR = BASE_DIR / "model"
+MODEL_PATH = MODEL_DIR / "rf_model.joblib"
 
-# ----------------------
-# Data
-# ----------------------
-X = pd.DataFrame({
-    "experience_years": [0, 1, 2, 3, 4, 5],
-    "preferred_domain_AI": [1, 0, 0, 1, 0, 1],
-    "preferred_domain_ML": [0, 1, 0, 0, 1, 0],
-    "preferred_domain_DS": [0, 0, 1, 0, 0, 0]
-})
 
-y = [0, 1, 1, 0, 1, 0]
+def load_training_data(path: Path) -> pd.DataFrame:
+    if not path.exists():
+        raise FileNotFoundError(f"Training dataset not found: {path}")
 
-X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.3, random_state=42
-)
+    df = pd.read_csv(path)
+    required_columns = [
+        "age",
+        "experience",
+        "interest_level",
+        "preferred_domain",
+        "course_label",
+    ]
 
-model = RandomForestClassifier(n_estimators=50, random_state=42)
+    missing = [column for column in required_columns if column not in df.columns]
+    if missing:
+        raise ValueError(f"Training data is missing required columns: {missing}")
 
-with mlflow.start_run():
-    model.fit(X_train, y_train)
+    return df
 
-    preds = model.predict(X_test)
-    acc = accuracy_score(y_test, preds)
 
-    # ---- Logging ----
-    mlflow.log_param("n_estimators", 50)
-    mlflow.log_metric("accuracy", acc)
+def main():
+    mlflow.set_tracking_uri("sqlite:///mlflow.db")
+    mlflow.set_experiment("course_recommendation")
 
-    mlflow.set_tag("model_type", "RandomForest")
-    mlflow.set_tag("stage", "baseline")
-    mlflow.set_tag("version", "v1")
+    df = load_training_data(DATA_PATH)
 
-    os.makedirs("model", exist_ok=True)
-    joblib.dump(model, "model/rf_model.joblib")
+    features = ["age", "experience", "interest_level", "preferred_domain"]
+    X = pd.get_dummies(df[features], columns=["preferred_domain"], prefix="preferred_domain")
+    y = df["course_label"]
 
-    mlflow.sklearn.log_model(model, name="course_recommender")
+    X_train, X_test, y_train, y_test = train_test_split(
+        X,
+        y,
+        test_size=0.2,
+        random_state=42,
+        stratify=y,
+    )
 
-print("✅ Training complete | Accuracy:", acc)
+    model = RandomForestClassifier(n_estimators=200, random_state=42)
+
+    with mlflow.start_run(run_name="random_forest_baseline") as run:
+        model.fit(X_train, y_train)
+        predictions = model.predict(X_test)
+        accuracy = accuracy_score(y_test, predictions)
+
+        mlflow.log_param("n_estimators", 200)
+        mlflow.log_metric("accuracy", accuracy)
+        mlflow.set_tags(
+            {
+                "model_type": "RandomForestClassifier",
+                "stage": "baseline",
+                "dataset": "courses.csv",
+                "version": "v1",
+            }
+        )
+
+        MODEL_DIR.mkdir(exist_ok=True)
+        joblib.dump(model, MODEL_PATH)
+        mlflow.sklearn.log_model(model, artifact_path="model", registered_model_name="course_recommender")
+
+        print(f"Training complete | accuracy={accuracy:.4f} | run_id={run.info.run_id}")
+
+
+if __name__ == "__main__":
+    main()
