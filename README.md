@@ -1,61 +1,80 @@
 # Course Recommendation System
 
-A machine learning-powered course recommendation platform that suggests the most suitable learning path based on user profile attributes such as age, experience, interest level, and preferred domain. The project combines a `RandomForestClassifier`, a FastAPI backend, and a Streamlit web interface to provide both API and interactive user experiences.
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-3.10%2B-3776AB?style=for-the-badge&logo=python" alt="Python" />
+  <img src="https://img.shields.io/badge/FastAPI-0.100%2B-009688?style=for-the-badge&logo=fastapi" alt="FastAPI" />
+  <img src="https://img.shields.io/badge/Streamlit-1.0%2B-FF4B4B?style=for-the-badge&logo=streamlit" alt="Streamlit" />
+  <img src="https://img.shields.io/badge/MLflow-Tracked-0194E2?style=for-the-badge&logo=mlflow" alt="MLflow" />
+</p>
+
+<p align="center">
+  <strong>Random Forest-powered recommendation engine for course suggestions</strong>
+</p>
+
+A machine learning-powered course recommendation platform that suggests the most suitable learning path based on learner profile attributes such as age, experience, interest level, and preferred domain.
+
+## Demo Screenshots
+
+<p align="center">
+  <img src="screenshots/course%20streamlit.png" alt="Course recommendation Streamlit app" width="900" />
+</p>
+
+<p align="center">
+  <img src="screenshots/course%20docs%20output.png" alt="FastAPI docs output" width="900" />
+</p>
 
 ## Overview
 
 This repository demonstrates a complete end-to-end recommendation workflow:
 
 - Data preparation using a small domain-aware dataset
-- Training a Random Forest model for course classification
+- Training a Random Forest classifier for course prediction
 - Saving and loading ML models for inference
 - Exposing a REST API for recommendation requests
-- Capturing user feedback and model monitoring signals
+- Capturing user feedback and monitoring signals
 - Tracking experiments with MLflow
-- Visualizing results through a Streamlit dashboard
+- Visualizing results in a Streamlit dashboard
 
-The project is designed as a practical ML system prototype for educational recommendations, but the architecture is general enough to adapt to other recommendation domains.
+The project is designed as a practical ML system prototype for educational recommendations, while also being flexible enough to adapt to other recommendation domains.
 
 ## Project Goals
 
 - Recommend a course based on a learner's background and interests
 - Provide a simple user-friendly interface for testing recommendations
-- Support versioned model experimentation and deployment workflows
-- Log model metrics and training metadata with MLflow
+- Support model experimentation and versioned deployment workflows
+- Log model metrics and metadata with MLflow
 - Enable behavioral feedback collection and monitoring
 
 ## Architecture
 
-The project is split into the following components:
+The system is split into the following components:
 
-- `Backend/` — FastAPI application and machine learning support modules
+- `Backend/` — FastAPI application and ML support modules
 - `streamlit_app/` — Streamlit UI and dashboards
 - `Data/` — training and feedback datasets
-- `models/` and `model/` — serialized model artifacts and baseline statistics
-- Root scripts — training, DB initialization, and MLflow export utilities
+- `model/` and `models/` — serialized models and baseline statistics
+- Root scripts — training, database initialization, and MLflow utilities
 
-## Core Features
+## Key Features
 
 - Random Forest-based recommendation engine
 - FastAPI REST API with endpoints for recommendations and feedback
 - Streamlit app for learner interaction
-- User preference input mapping to course labels
-- Feedback storage for improving the recommendation system
+- Preference mapping to course labels
+- Feedback storage for improving recommendations
 - Experiment tracking with MLflow
 - Drift monitoring utilities and baseline stats
-- A/B testing scaffold for model version comparison
+- A/B testing scaffolding for model comparison
 
-## Data Model
+## Dataset
 
-The sample dataset uses a synthetic learning profile table:
+The sample dataset uses a synthetic learning profile table with:
 
 - `age`
 - `experience`
 - `interest_level`
 - `preferred_domain`
 - `course_label`
-
-Example training data is stored in `Data/courses.csv`.
 
 Example rows:
 
@@ -71,26 +90,26 @@ age,experience,interest_level,preferred_domain,course_label
 
 The recommendation model is trained using a `RandomForestClassifier` from scikit-learn.
 
-The training script initializes a simple MLflow experiment and logs:
+Training logs include:
 
 - model parameters
 - accuracy metric
 - experiment tags
 - serialized model artifact
 
-Model training logic is implemented in:
+Core training logic is implemented in:
 
 - `train_model.py`
 - `Backend/recommender.py`
 
-The model artifact is stored in:
+Model artifacts are stored in:
 
 - `model/rf_model.joblib`
 - `models/content_model.pkl`
 
 ## API
 
-The backend is implemented with FastAPI and can be launched using uvicorn.
+The backend is implemented with FastAPI and can be launched with Uvicorn.
 
 ### Endpoints
 
@@ -122,9 +141,9 @@ curl -X POST "http://localhost:8000/recommend" \
 
 ## Web Interface
 
-The Streamlit application provides a simple UI for entering learner preferences and requesting course suggestions.
+The Streamlit application provides a simple UI for entering learner preferences and requesting suggestions.
 
-Launch:
+Launch it with:
 
 ```bash
 streamlit run streamlit_app/app.py
@@ -136,11 +155,11 @@ This app sends a request to the FastAPI service and displays the returned recomm
 
 MLflow is used to track experiments and model runs.
 
-Files:
+Relevant files:
 
 - `train_model.py` — creates the experiment and logs metrics
 - `show_mlflow_runs.py` — prints logged runs
-- `export_mlflow_csv.py` — exports MLflow run metadata to a CSV
+- `export_mlflow_csv.py` — exports run metadata to CSV
 - `mlflow.db` — local MLflow tracking database
 
 Example:
@@ -158,8 +177,6 @@ The repository includes prototype components for model monitoring and governance
 - `Backend/schema_guard.py` — intended for input validation and schema checks
 - `Backend/ab_testing.py` — demonstrates versioned model selection logic
 - `Backend/model_registry.py` — manages model registry entries
-
-These are useful for building more robust production-grade ML systems.
 
 ## Repository Structure
 
@@ -199,6 +216,11 @@ Course-Recommendation_Random-Forest-Classifier/
 │   ├── feature_columns.pkl
 │   ├── feature_schema.json
 │   └── ...
+├── screenshots/
+│   ├── course 1.png
+│   ├── course docs output.png
+│   ├── course streamlit.png
+│   └── init.py
 ├── streamlit_app/
 │   ├── analytics_dashboard.py
 │   ├── app.py
@@ -266,13 +288,11 @@ http://localhost:8000/docs
 streamlit run streamlit_app/app.py
 ```
 
-### Optional: view MLflow experiment dashboard
+### Optional: view MLflow dashboard
 
 ```bash
 streamlit run streamlit_app/mlflow_dashboard.py
 ```
-
-Note: some dashboard paths are environment-specific and may require adjustment depending on your local file location.
 
 ## Technologies Used
 
@@ -297,25 +317,25 @@ This project is particularly useful for:
 - model monitoring experiments
 - API-driven recommendation workflows
 
-## Strengths of the Project
+## Strengths
 
 - Clear separation between model logic, API layer, and UI
 - Demonstrates a realistic ML pipeline
 - Includes experiment tracking and model artifact management
-- Provides a simple and testable user flow
-- Good starter template for expanding into a larger recommender system
+- Provides a testable user flow
+- Good starter template for broader recommender systems
 
 ## Improvement Opportunities
 
-- The dataset is synthetic and small; production-scale use would require real learner data
-- Some paths and scripts are environment-specific (for example, hardcoded Windows paths)
+- The dataset is synthetic and small; real data would improve realism
+- Some paths and scripts are environment-specific
 - Model artifact naming is slightly inconsistent across directories
-- A/B testing and drift monitoring are implemented as prototypes, not full production services
-- Feedback persistence and model retraining workflows can be further automated
+- A/B testing and drift monitoring are prototype-level implementations
+- Feedback persistence and retraining workflows could be automated
 
 ## Future Enhancements
 
-- Replace synthetic data with real user-course interaction data
+- Replace synthetic data with real user-course interactions
 - Add authentication and user profiles
 - Support multiple recommendation models and evaluation benchmarks
 - Build an automated retraining pipeline
@@ -324,8 +344,12 @@ This project is particularly useful for:
 
 ## Summary
 
-This project is a practical machine learning recommendation system that demonstrates how to train, expose, monitor, and interact with a course recommendation model using modern Python tools. It combines classic ML with deployment patterns that are commonly used in real-world AI applications.
+This project is a practical machine learning recommendation system that demonstrates how to train, expose, monitor, and interact with a course recommendation model using modern Python tools.
 
 The combination of a Random Forest model, FastAPI backend, and Streamlit interface makes it a strong educational example for building recommendation systems end-to-end.
 
+---
 
+<p align="center">
+  Made with ❤️ for ML-powered learning recommendations
+</p>
