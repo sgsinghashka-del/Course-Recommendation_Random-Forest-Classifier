@@ -1,0 +1,14 @@
+{
+  "mean": {
+    "preferred_domain_AI": 0.0,
+    "preferred_domain_ML": 0.0,
+    "preferred_domain_DS": 0.0,
+    "experience_years": 0.0
+  },
+  "std": {
+    "preferred_domain_AI": 1.0,
+    "preferred_domain_ML": 1.0,
+    "preferred_domain_DS": 1.0,
+    "experience_years": 1.0
+  }
+}

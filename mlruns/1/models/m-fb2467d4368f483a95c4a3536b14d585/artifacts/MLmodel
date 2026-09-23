@@ -1,0 +1,23 @@
+artifact_path: file:C:/Users/Hp/Desktop/Course Recommendation_Random Forest Classifier/mlruns/1/models/m-fb2467d4368f483a95c4a3536b14d585/artifacts
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.skops
+    predict_fn: predict
+    python_version: 3.14.3
+  sklearn:
+    code: null
+    pickled_model: model.skops
+    serialization_format: skops
+    sklearn_version: 1.9.0
+    skops_trusted_types: null
+mlflow_version: 3.14.0
+model_id: m-fb2467d4368f483a95c4a3536b14d585
+model_size_bytes: 199968
+model_uuid: m-fb2467d4368f483a95c4a3536b14d585
+prompts: null
+run_id: 6422ca358b3f46e0bfe3c0e2dbd14899
+utc_time_created: '2026-07-04 18:17:08.249535'

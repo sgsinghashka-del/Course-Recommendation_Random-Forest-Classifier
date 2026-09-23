@@ -1,0 +1,13 @@
+{
+  "version": "v1",
+  "features": [
+    "age",
+    "experience",
+    "interest_level",
+    "preferred_domain_AI",
+    "preferred_domain_ML",
+    "preferred_domain_DS",
+    "preferred_domain_Backend",
+    "preferred_domain_Cloud"
+  ]
+}
